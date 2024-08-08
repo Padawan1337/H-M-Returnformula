@@ -79,7 +79,6 @@
     </div>
     <script>
         document.getElementById('reklamationsForm').addEventListener('submit', function(event) {
-            // HTML5 validation will handle most of the required checks, no need to manually check here
             event.preventDefault();
             sendFormular();
         });
@@ -93,7 +92,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                alert('Reklamationen er sendt. Du vil modtage en kvittering på email.');
+                window.location.href = 'bekræftelse.html';
             })
             .catch(error => {
                 console.error('Fejl:', error);
