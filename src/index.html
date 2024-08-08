@@ -58,7 +58,7 @@
             <input type="text" id="varenummer" name="varenummer" required>
 
             <label for="modtagelsesdato">Modtagelsesdato*</label>
-            <input type="date" id="modtagelsesdato" name="modtagelsesdato" required>
+            <input type="date" id="modtagelsesdato" name="modtagelsesdato" >
 
             <label for="emne">Emne</label>
             <input type="text" id="emne" name="emne">
@@ -67,12 +67,12 @@
             <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
 
             <label for="billeder">Upload billeder:</label>
-            <input type="file" id="billeder" name="billeder[]" accept="image/*" multiple required>
+            <input type="file" id="billeder" name="billeder[]" accept="image/*" >
 
-            <label for="samtykke">
-                <input type="checkbox" id="samtykke" name="samtykke" required>
-                Jeg giver samtykke til behandling af mine data ud fra ELVA's <a href="#">persondatapolitik</a>.
-            </label>
+            //<label for="samtykke">
+            //    <input type="checkbox" id="samtykke" name="samtykke" required>
+            //    Jeg giver samtykke til behandling af mine data ud fra ELVA's <a href="#">persondatapolitik</a>.
+            // </label>
 
             <button type="submit">Send Reklamation</button>
         </form>
@@ -94,6 +94,8 @@
             .then(data => {
                 window.location.href = 'confirmation.html';
             })
+            .then(data => {
+                window.location.href = 'confirmation.html';
             .catch(error => {
                 console.error('Fejl:', error);
             });
