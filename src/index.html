@@ -86,7 +86,7 @@
         function sendFormular() {
             const formData = new FormData(document.getElementById('reklamationsForm'));
 
-            fetch('https://returnformula.azurewebsites.net/api/send-reklamation', { // Opdater denne linje
+            fetch('https://returnformula.azurewebsites.net/api/send-reklamation?code=${process.env.REACT_APP_FUNCTION_KEY}', { // Opdater denne linje
                 method: 'POST',
                 body: formData
             })
