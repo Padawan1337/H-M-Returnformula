@@ -1,14 +1,21 @@
-const express = require('express');
 const sgMail = require('@sendgrid/mail');
-const app = express();
-const port = process.env.PORT || 3000;
-
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+module.exports = async function (context, req) {
+    context.res = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*', // Tillad alle domæner - ændre dette til specifikke domæner hvis nødvendigt
+            'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        }
+    };
 
-app.post('/send-reklamation', (req, res) => {
+    if (req.method === 'OPTIONS') {
+        context.res.status = 200;
+        return;
+    }
+
     const { email, navn, gadeNummer, postnummerBy, mobilnummer, salgordrenummer, produktKategori, varenummer, modtagelsesdato, emne, beskrivelse } = req.body;
 
     const msg = {
@@ -29,15 +36,13 @@ app.post('/send-reklamation', (req, res) => {
         `,
     };
 
-    sgMail
-        .send(msg)
-        .then(() => {
-            res.json({ message: 'Reklamationen er sendt. Du vil modtage en kvittering på email.' });
-        })
-        .catch(error => {
-            console.error(error);
-            res.status(500).json({ error: 'Der opstod en fejl ved afsendelse af reklamationen.' });
-        });
-});
-
-module.exports = app;
+    try {
+        await sgMail.send(msg);
+        context.res.status = 200;
+        context.res.body = { message: 'Reklamationen er sendt. Du vil modtage en kvittering på email.' };
+    } catch (error) {
+        context.log.error('Fejl:', error);
+        context.res.status = 500;
+        context.res.body = { error: 'Der opstod en fejl ved afsendelse af reklamationen.' };
+    }
+};
