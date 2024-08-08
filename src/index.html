@@ -1,17 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="da">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Vanilla JavaScript App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reklamationsformular</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <main>
-    <h1>Vanilla JavaScript App</h1>
-  </main>
-</body>
+    <div class="container">
+        <h1>Kontakt os</h1>
+        <form id="reklamationsForm" enctype="multipart/form-data">
+            <label for="formType">Vælg venligst den formular der passer til din supportsag:</label>
+            <select id="formType" name="formType" required>
+                <option value="reklamation">Reklamation</option>
+                <option value="spørgsmål">Spørgsmål</option>
+                <option value="klage">Klage</option>
+            </select>
 
+            <label for="email">E-mailadresse*</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="role">Jeg er...</label>
+            <select id="role" name="role" required>
+                <option value="kunde">en kunde</option>
+                <option value="forhandler">en forhandler</option>
+                <option value="andet">andet</option>
+            </select>
+
+            <label for="navn">Navn*</label>
+            <input type="text" id="navn" name="navn" required>
+
+            <label for="gadeNummer">Gade og nummer*</label>
+            <input type="text" id="gadeNummer" name="gadeNummer" required>
+
+            <label for="postnummerBy">Postnummer og by*</label>
+            <input type="text" id="postnummerBy" name="postnummerBy" required>
+
+            <label for="mobilnummer">Mobilnummer*</label>
+            <input type="text" id="mobilnummer" name="mobilnummer" required>
+
+            <label for="salgordrenummer">Salgordrenummer*</label>
+            <input type="text" id="salgordrenummer" name="salgordrenummer" required>
+
+            <p>OBS! Skal være nuværende adresse.</p>
+            <p>Du finder nummeret på din ordrebekræftelse. Nummeret er på 10 cifre og starter med 52 eller 71.</p>
+
+            <label for="produktKategori">Produktkategori*</label>
+            <select id="produktKategori" name="produktKategori" required>
+                <option value="">Vælg en kategori</option>
+                <option value="elektronik">Elektronik</option>
+                <option value="møbler">Møbler</option>
+                <option value="tøj">Tøj</option>
+                <option value="andet">Andet</option>
+            </select>
+
+            <label for="varenummer">Varenummer og varenavn*</label>
+            <input type="text" id="varenummer" name="varenummer" required>
+
+            <label for="modtagelsesdato">Modtagelsesdato*</label>
+            <input type="date" id="modtagelsesdato" name="modtagelsesdato" required>
+
+            <label for="emne">Emne</label>
+            <input type="text" id="emne" name="emne">
+
+            <label for="beskrivelse">Beskrivelse*</label>
+            <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
+
+            <label for="billeder">Upload billeder:</label>
+            <input type="file" id="billeder" name="billeder[]" accept="image/*" multiple required>
+
+            <label for="samtykke">
+                <input type="checkbox" id="samtykke" name="samtykke" required>
+                Jeg giver samtykke til behandling af mine data ud fra ELVA's <a href="#">persondatapolitik</a>.
+            </label>
+
+            <button type="submit">Send Reklamation</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('reklamationsForm').addEventListener('submit', function(event) {
+            // HTML5 validation will handle most of the required checks, no need to manually check here
+            event.preventDefault();
+            sendFormular();
+        });
+
+        function sendFormular() {
+            const formData = new FormData(document.getElementById('reklamationsForm'));
+
+            fetch('/send-reklamation', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Reklamationen er sendt. Du vil modtage en kvittering på email.');
+            })
+            .catch(error => {
+                console.error('Fejl:', error);
+            });
+        }
+    </script>
+</body>
 </html>
